@@ -47,8 +47,8 @@ public class WechatCommonServiceImpl extends BaseComponent implements WechatComm
 	/**
 	 * HTTP proxy instance
 	 */
-	@Resource(name = "urlEncodedHttpProxy")
-	private HttpProxy urlEncodedHttpProxy;
+	@Resource(name = "httpProxy[x-www-form-urlencoded]")
+	private HttpProxy httpProxy;
 	/**
 	 * JSON解析器<br>
 	 */
@@ -108,7 +108,7 @@ public class WechatCommonServiceImpl extends BaseComponent implements WechatComm
 		// TODO check ticket expire
 		String url = getConst("WECHAT-GET-JSAPI-TICKET-URL");
 		url = url.replace("{accessToken}", accessToken);
-		String jsonData = urlEncodedHttpProxy.doGet(url);
+		String jsonData = httpProxy.doGet(url);
 		WechatJsapiTicketDto result = this.parseJson(jsonData, WechatJsapiTicketDto.class);
 		super.getLogger().info("Wechat jsapi ticket refresh.");
 		return result.getTicket();
@@ -144,7 +144,7 @@ public class WechatCommonServiceImpl extends BaseComponent implements WechatComm
         url = url.replace("{appid}", appid);
         url = url.replace("{secret}", secretKey);
 
-        String jsonData = urlEncodedHttpProxy.doGet(url);
+        String jsonData = httpProxy.doGet(url);
         WechatBaseAccTokenDto accessTokenDTO = this.parseJson(jsonData, WechatBaseAccTokenDto.class);
         super.getLogger().info("Wechat access token refresh.");
         return accessTokenDTO;
@@ -162,7 +162,7 @@ public class WechatCommonServiceImpl extends BaseComponent implements WechatComm
         url = url.replace("{appid}", appid);
         url = url.replace("{secret}", secret);
         url = url.replace("{accessCode}", accessCode);
-        String jsonText = urlEncodedHttpProxy.doGet(url);
+        String jsonText = httpProxy.doGet(url);
         WechatWebAccTokenDto accessTokenDTO = this.parseJson(jsonText, WechatWebAccTokenDto.class);
         if (accessTokenDTO == null || accessTokenDTO.getOpenid() == null) {
             throw new ApplicationException(UME_WECHAT_MSG_302);
@@ -182,7 +182,7 @@ public class WechatCommonServiceImpl extends BaseComponent implements WechatComm
 
         urlCgi = urlCgi.replace("{accessToken}", accessToken);
         super.getLogger().info("wechatCommonService is " + urlCgi);
-        String jsonText = urlEncodedHttpProxy.doGet(urlCgi);
+        String jsonText = httpProxy.doGet(urlCgi);
         WechatUserDto weChatUserDTO = this.parseJson(jsonText, WechatUserDto.class);
         return weChatUserDTO;
     }
@@ -198,7 +198,7 @@ public class WechatCommonServiceImpl extends BaseComponent implements WechatComm
         wechatPostTmplMsgUrl = wechatPostTmplMsgUrl.replace("{accessToken}", getAccessToken());
         for (WechatTemplateDto wechatdto : wechatTemplateDTO) {
             String data = this.renderJson(wechatdto);
-            urlEncodedHttpProxy.doPost(wechatPostTmplMsgUrl, data);
+            httpProxy.doPost(wechatPostTmplMsgUrl, data);
         }
     }
 
@@ -235,7 +235,7 @@ public class WechatCommonServiceImpl extends BaseComponent implements WechatComm
             if (file.exists()) {
                 file.delete();
             }
-            long downloadSize = this.urlEncodedHttpProxy.doDownload(url, saveToRootPath + subPath + fileName, null, null);
+            long downloadSize = this.httpProxy.doDownload(url, saveToRootPath + subPath + fileName, null, null);
             if (downloadSize == 0) {
                 result.add("");
                 super.getLogger().warn("Downlod file size is 0, file name:" + fileName);

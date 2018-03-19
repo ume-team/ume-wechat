@@ -9,8 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.umeframework.dora.http.HttpProxy;
-import org.umeframework.dora.http.impl.HttpProxyImpl;
 import org.umeframework.dora.message.MessageProperties;
 //import org.umeframework.wechat.app.config.AppAutoConfiguration;
 
@@ -59,23 +57,6 @@ public class Application {
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-	}
-	
-	/**
-	 * urlEncodedHttpProxy
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	@Bean(name = "urlEncodedHttpProxy")
-	public HttpProxy urlEncodedHttpProxy() throws Exception {
-		HttpProxyImpl instance = new HttpProxyImpl();
-		instance.setAppContentType("application/x-www-form-urlencoded");
-		instance.setEntityContentType("application/x-www-form-urlencoded");
-		instance.setEntityCharset("UTF-8");
-		instance.setParamCharset("UTF-8");
-		instance.setUseSSL(false);
-		return instance;
 	}
 	
 	/**
