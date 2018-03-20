@@ -47,18 +47,18 @@ public class WechatCommonServiceImpl extends BaseComponent implements WechatComm
 	/**
 	 * HTTP proxy instance
 	 */
-	@Resource(name = "httpProxy[x-www-form-urlencoded]")
+	@Resource(name = "doraHttpClient[x-www-form-urlencoded]")
 	private HttpProxy httpProxy;
 	/**
 	 * JSON解析器<br>
 	 */
-	@Resource(name = "ajaxParser")
+	@Resource(name = "doraAjaxParser")
 	private AjaxParser<String> ajaxParser;
 
 	/**
 	 * JSON生成器<br>
 	 */
-	@Resource(name = "ajaxRender")
+	@Resource(name = "doraAjaxRender")
 	private AjaxRender<String> ajaxRender;
 
 	/*
